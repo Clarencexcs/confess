@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     
     <style>
-        body {
+          body {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -39,14 +39,13 @@
             text-align: center;
             opacity: 0;
             transition: opacity 0.5s;
-            
         }
         button {
             font-size: 18px;
             padding: 10px 20px;
             margin: 0 10px;
             cursor: pointer;
-            color:red;
+            color: red;
         }
         .avoid-button {
             position: absolute;
@@ -56,34 +55,35 @@
             color: red;
             display: none;
         }
-
+        
   
     </style>
 </head>
 <body>
+       
+<img id="hiddenPicture" src="cool.jpg" alt="Hidden Picture" style="display: none; max-width: 100px; margin-top: 20px;">
+
+<video id="yesVideo" style="display: none; max-width: 50%; margin-top: 20px;" controls>
+    <source src="donnysavage.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+    </div>
     <div class="heart">❤️</div>
     <div class="confession">would you marry me?</div>
     <div class="response-buttons">
         <button id="yesBtn">Yes</button>
         <button id="noBtn">No</button>
-            <audio id="backgroundMusic" loop>
-                <source src="usherheydaddy.mp3" type="audio/mpeg">
-            </audio>
-
-            <audio id="noButtonMusic">
-                <source src="boomsound.mp3" type="audio/mpeg">
-            </audio>
-
-            <div id="pictureContainer" style="position: fixed; top: 10px; left: 10px;   display: inline-block;margin: 10px;  display: flex;   justify-content: space-between; align-items: center;  padding: 0 10px;">
-                <img src="cool.jpg" alt="cool Picture" style="max-width: 100px;">
-            </div>
-
-            <div id="pictureContainer" style="position: fixed; top: 10px; left: 1250px; display: inline-block;margin: 10px;  display: flex;   justify-content: space-between; align-items: center;  padding: 0 10px;">
-                <img src="cool.jpg" alt="cool Picture" style="max-width: 100px;">
-            </div>
-            </div>
+    </div>
+    <button id="avoidBtn" class="avoid-button">NO</button>
+    <button id="tryAgainBtn" style="display: none; margin-top: 20px;">Try Again</button>
+    <audio id="backgroundMusic" loop>
+        <source src="usherheydaddy.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="noButtonMusic">
+        <source src="boomsound.mp3" type="audio/mpeg">
+    </audio>
          
-        </audio>
+    <button id="tryAgainBtn" style="display: none; margin-top: 20px;">Try Again</button>
     </div>
     <button id="avoidBtn" class="avoid-button">NO</button>
 
@@ -94,58 +94,72 @@
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
         const avoidBtn = document.getElementById('avoidBtn');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const noButtonMusic = document.getElementById('noButtonMusic');
         let isConfessionVisible = false;
 
-        heart.addEventListener('click', () => {
-            if (!isConfessionVisible) {
-                confession.style.opacity = '1';
-                responseButtons.style.opacity = '1';
-                isConfessionVisible = true;
-            } else {
-                confession.style.opacity = '0';
-                responseButtons.style.opacity = '0';
-                isConfessionVisible = false;
-            }
-        });
+        const hiddenPicture = document.getElementById('hiddenPicture');
+
+heart.addEventListener('click', () => {
+    if (!isConfessionVisible) {
+        confession.style.opacity = '1';
+        responseButtons.style.opacity = '1';
+        hiddenPicture.style.display = 'block'; // Show the picture
+        isConfessionVisible = true;
+    } else {
+        confession.style.opacity = '0';
+        responseButtons.style.opacity = '0';
+        hiddenPicture.style.display = 'none'; // Hide the picture
+        isConfessionVisible = false;
+    }
+});
+
+
+            
+
 
         yesBtn.addEventListener('click', () => {
-    confession.textContent = "That's wonderful! I'm so happy!";
-    responseButtons.style.display = 'none';
-    avoidBtn.style.display = 'none';
-    heart.style.animation = 'none';
-    heart.offsetHeight; /* trigger reflow */
-    heart.style.animation = 'pulse 0.5s infinite';
+            confession.textContent = "That's wonderful! I'm so happy!";
+            responseButtons.style.display = 'none';
+            avoidBtn.style.display = 'none';
+            hiddenPicture.style.display = 'none'; // Hide the picture
+            heart.style.animation = 'none';
+            heart.offsetHeight; /* trigger reflow */
+            heart.style.animation = 'pulse 0.5s infinite';
+            
+            // Add confetti effect
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.5 }
+            });
+
+            yesVideo.style.display = 'block';
+            yesVideo.play().catch(e => console.error("Error playing video:", e));
+
+            // Play background music
+            backgroundMusic.play().catch(e => console.error("Error playing music:", e));
     
-    document.getElementById('pictureContainer').style.display = 'block';
-    // Add confetti effect
-    confetti({
-        particleCount: 150,
-        spread: 100,
-        origin: { y: 0.5 }
-    });
-
-    const music = document.getElementById('backgroundMusic');
-    music.play();
-
-
-
-});
+            
+        });
 
         noBtn.addEventListener('click', () => {
             confession.textContent = "Are you sure? Maybe you want to avoid answering?";
             responseButtons.style.display = 'none';
             avoidBtn.style.display = 'block';
+            hiddenPicture.style.display = 'none'; // Hide the picture
             moveAvoidButton();
             
-            const noMusic = document.getElementById('noButtonMusic');
-            noMusic.play();
+
+            // Play no button music
+            noButtonMusic.play().catch(e => console.error("Error playing no button sound:", e));
         });
 
         function moveAvoidButton() {
             const maxWidth = window.innerWidth - avoidBtn.offsetWidth;
             const maxHeight = window.innerHeight - avoidBtn.offsetHeight;
             avoidBtn.style.left = Math.random() * maxWidth + 'px';
-            avoidBtn.style. top = Math.random() * maxHeight + 'px';
+            avoidBtn.style.top = Math.random() * maxHeight + 'px';
         }
 
         avoidBtn.addEventListener('touchstart', (e) => {
@@ -156,9 +170,52 @@
         avoidBtn.addEventListener('touchmove', (e) => {
             e.preventDefault();
             moveAvoidButton();
-        
         });
-       
+
+        const tryAgainBtn = document.getElementById('tryAgainBtn');
+
+function resetPage() {
+    confession.textContent = "would you marry me?";
+    confession.style.opacity = '0';
+    responseButtons.style.opacity = '0';
+    responseButtons.style.display = 'block';
+    avoidBtn.style.display = 'none';
+    hiddenPicture.style.display = 'none';
+    yesVideo.style.display = 'none';
+    yesVideo.pause();
+    yesVideo.currentTime = 0;
+    heart.style.animation = 'pulse 1.5s infinite';
+    isConfessionVisible = false;
+    tryAgainBtn.style.display = 'none';
+    backgroundMusic.pause();
+    backgroundMusic.currentTime = 0;
+}
+
+tryAgainBtn.addEventListener('click', resetPage);
+
+function showTryAgainButton() {
+    tryAgainBtn.style.display = 'block';
+}
+
+yesBtn.addEventListener('click', () => {
+    // ... (existing code)
+
+    showTryAgainButton();
+});
+
+
+
+avoidBtn.addEventListener('mouseenter', () => {
+    moveAvoidButton();
+});
+
+avoidBtn.addEventListener('click', () => {
+    confession.textContent = "You can't avoid love forever!";
+    avoidBtn.style.display = 'none';
+    showTryAgainButton();
+});
+
     </script>
+       
 </body>
 </html>
