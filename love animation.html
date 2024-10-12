@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Confession</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #ffe6e6;
+        }
+        .heart {
+            font-size: 100px;
+            cursor: pointer;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .confession {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .response-buttons {
+            margin-top: 20px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s;
+            
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            color:red;
+        }
+        .avoid-button {
+            position: absolute;
+            font-size: 18px;
+            padding: 10px 20px;
+            cursor: pointer;
+            color: red;
+            display: none;
+        }
+
+  
+    </style>
+</head>
+<body>
+    <div class="heart">❤️</div>
+    <div class="confession">would you marry me?</div>
+    <div class="response-buttons">
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
+            <audio id="backgroundMusic" loop>
+                <source src="usherheydaddy.mp3" type="audio/mpeg">
+            </audio>
+
+            <audio id="noButtonMusic">
+                <source src="boomsound.mp3" type="audio/mpeg">
+            </audio>
+
+            <div id="pictureContainer" style="position: fixed; top: 10px; left: 10px;   display: inline-block;margin: 10px;  display: flex;   justify-content: space-between; align-items: center;  padding: 0 10px;">
+                <img src="cool.jpg" alt="cool Picture" style="max-width: 100px;">
+            </div>
+
+            <div id="pictureContainer" style="position: fixed; top: 10px; left: 1250px; display: inline-block;margin: 10px;  display: flex;   justify-content: space-between; align-items: center;  padding: 0 10px;">
+                <img src="cool.jpg" alt="cool Picture" style="max-width: 100px;">
+            </div>
+            </div>
+         
+        </audio>
+    </div>
+    <button id="avoidBtn" class="avoid-button">NO</button>
+
+    <script>
+        const heart = document.querySelector('.heart');
+        const confession = document.querySelector('.confession');
+        const responseButtons = document.querySelector('.response-buttons');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const avoidBtn = document.getElementById('avoidBtn');
+        let isConfessionVisible = false;
+
+        heart.addEventListener('click', () => {
+            if (!isConfessionVisible) {
+                confession.style.opacity = '1';
+                responseButtons.style.opacity = '1';
+                isConfessionVisible = true;
+            } else {
+                confession.style.opacity = '0';
+                responseButtons.style.opacity = '0';
+                isConfessionVisible = false;
+            }
+        });
+
+        yesBtn.addEventListener('click', () => {
+    confession.textContent = "That's wonderful! I'm so happy!";
+    responseButtons.style.display = 'none';
+    avoidBtn.style.display = 'none';
+    heart.style.animation = 'none';
+    heart.offsetHeight; /* trigger reflow */
+    heart.style.animation = 'pulse 0.5s infinite';
+    
+    document.getElementById('pictureContainer').style.display = 'block';
+    // Add confetti effect
+    confetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.5 }
+    });
+
+    const music = document.getElementById('backgroundMusic');
+    music.play();
+
+
+
+});
+
+        noBtn.addEventListener('click', () => {
+            confession.textContent = "Are you sure? Maybe you want to avoid answering?";
+            responseButtons.style.display = 'none';
+            avoidBtn.style.display = 'block';
+            moveAvoidButton();
+            
+            const noMusic = document.getElementById('noButtonMusic');
+            noMusic.play();
+        });
+
+        function moveAvoidButton() {
+            const maxWidth = window.innerWidth - avoidBtn.offsetWidth;
+            const maxHeight = window.innerHeight - avoidBtn.offsetHeight;
+            avoidBtn.style.left = Math.random() * maxWidth + 'px';
+            avoidBtn.style. top = Math.random() * maxHeight + 'px';
+        }
+
+        avoidBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveAvoidButton();
+        });
+
+        avoidBtn.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            moveAvoidButton();
+        
+        });
+       
+    </script>
+</body>
+</html>
