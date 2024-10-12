@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Confession</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #ffe6e6;
+        }
+        .heart {
+            font-size: 100px;
+            cursor: pointer;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .confession {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .response-buttons {
+            margin-top: 20px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+        .avoid-button {
+            position: absolute;
+            font-size: 18px;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="heart">❤️</div>
+    <div class="confession">I've had a crush on you for a long time.<br>Will you be my valentine?</div>
+    <div class="response-buttons">
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
+    </div>
+    <button id="avoidBtn" class="avoid-button">Avoid</button>
+
+    <script>
+        const heart = document.querySelector('.heart');
+        const confession = document.querySelector('.confession');
+        const responseButtons = document.querySelector('.response-buttons');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const avoidBtn = document.getElementById('avoidBtn');
+        let isConfessionVisible = false;
+
+        heart.addEventListener('click', () => {
+            if (!isConfessionVisible) {
+                confession.style.opacity = '1';
+                responseButtons.style.opacity = '1';
+                isConfessionVisible = true;
+            } else {
+                confession.style.opacity = '0';
+                responseButtons.style.opacity = '0';
+                isConfessionVisible = false;
+            }
+        });
+
+        yesBtn.addEventListener('click', () => {
+            confession.textContent = "That's wonderful! I'm so happy!";
+            responseButtons.style.display = 'none';
+            avoidBtn.style.display = 'none';
+            heart.style.animation = 'none';
+            heart.offsetHeight; /* trigger reflow */
+            heart.style.animation = 'pulse 0.5s infinite';
+        });
+
+        noBtn.addEventListener('click', () => {
+            confession.textContent = "Are you sure? Maybe you want to avoid answering?";
+            responseButtons.style.display = 'none';
+            avoidBtn.style.display = 'block';
+            moveAvoidButton();
+        });
+
+        function moveAvoidButton() {
+            const maxWidth = window.innerWidth - avoidBtn.offsetWidth;
+            const maxHeight = window.innerHeight - avoidBtn.offsetHeight;
+            avoidBtn.style.left = Math.random() * maxWidth + 'px';
+            avoidBtn.style. top = Math.random() * maxHeight + 'px';
+        }
+
+        avoidBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveAvoidButton();
+        });
+
+        avoidBtn.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            moveAvoidButton();
+        });
+    </script>
+</body>
+</html>
